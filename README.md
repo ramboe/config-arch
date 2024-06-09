@@ -30,6 +30,7 @@ docker build -t custom-arch-ansible .
 
 ```shell
 docker run --detach --privileged --name archlinux_ansible_1 -it --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --volume=$(pwd):/etc/ansible/roles/role_under_test:rw --volume=/home/ramboe/Documents/ansible:/root --volume=/mnt/data/source/config-arch/ansible:/root/clemens custom-arch-ansible:latest sh
+docker run --detach --privileged --name archlinux_ansible_1 -it --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --volume=$(pwd):/etc/ansible/roles/role_under_test:rw --volume=/mnt/data/source/config-arch/ansible:/root/ custom-arch-ansible:latest sh
 ```
 
 ### 4 - exec ansible playbook  
@@ -37,6 +38,7 @@ docker run --detach --privileged --name archlinux_ansible_1 -it --volume=/sys/fs
 ```shell
 #docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /root/ansible/yaml/fem.yml
 docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /root/clemens/fem.yml
+docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /root/fem.yml
 ```  
 
 ![](https://firebasestorage.googleapis.com/v0/b/firescript-577a2.appspot.com/o/imgs%2Fapp%2Framboe%2FQAyG_Qb4lz.png?alt=media&token=421054cf-e855-4c10-970f-a779239d6eb3)  

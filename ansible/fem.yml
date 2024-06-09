@@ -62,13 +62,17 @@
     ## --------------
     
     ### should not be necessary
+    - name: make .fonts directory
+      shell: mkdir -p "{{ home_directory }}/.fonts"
     # - name: make home directory for user
     #   shell: mkdir "{{ home_directory }}"
     - name: make Downloads directory
-      shell: mkdir "{{ temp_working_directory }}"
+      shell: mkdir -p "{{ temp_working_directory }}"
+    - name: make .i3 config directory
+      shell: mkdir -p "{{ home_directory }}/.config/i3/"
     ### is necessary at least the first time 
-    - name: make .fonts directory
-      shell: mkdir "{{ home_directory }}/.fonts"
+#    - name: make .fonts directory
+#      shell: mkdir -p "{{ home_directory }}/.fonts"
 
     - name: Download JetBrainsMono font
       ansible.builtin.get_url:
@@ -80,16 +84,16 @@
         dest: "{{ home_directory }}/.fonts"
         copy: yes
 
-    - name: Download oh-my-bash
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
-        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
-
-    - name: make oh-my-bash executable
-      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
-
-    - name: Install oh-my-bash
-      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+#    - name: Download oh-my-bash
+#      ansible.builtin.get_url:
+#        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
+#        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+#
+#    - name: make oh-my-bash executable
+#      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
+#
+#    - name: Install oh-my-bash
+#      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
   
   # - name: Download jetbrains-toolbox
   #   ansible.builtin.get_url:
