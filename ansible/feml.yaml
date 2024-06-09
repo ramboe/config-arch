@@ -1,0 +1,114 @@
+
+- hosts: localhost
+  vars:
+    user_name: ramboe
+    home_directory: /home/{{ user_name }}
+    temp_working_directory: "{{ home_directory }}/Downloads"
+
+
+  become: true
+  tasks:
+    - name: Run the equivalent of "pacman -Sy" as a separate step
+      pacman:
+        update_cache: yes
+    
+    # - name: Install yay
+    #   ansible.builtin.git:
+    #     repo: 'https://github.com/mnussbaum/ansible-yay.git'
+    #     dest: '/usr/share/ansible'
+
+    - name: Install azure-cli
+      pacman: name=azure-cli
+    
+    # # - name: Install brave-browser
+    # #   yay: name=brave-browser
+    
+    # - name: Install edge
+    #   yay: name=microsoft-edge-stable
+
+    - name: Install chromium
+      pacman: name=chromium
+    - name: Install dotnet-sdk
+      pacman: name=dotnet-sdk
+    - name: Install keepassxc
+      pacman: name=keepassxc
+    - name: Install code
+      pacman: name=code
+    - name: Install flameshot
+      pacman: name=flameshot
+    - name: Install nextcloud-client
+      pacman: name=nextcloud-client
+    - name: Install telegram-desktop
+      pacman: name=telegram-desktop
+    - name: Install obs-studio
+      pacman: name=obs-studio
+    - name: Install neovim
+      pacman: name=neovim
+    - name: Install ripgrep
+      pacman: name=ripgrep
+    
+    # shoud already exist on the machine
+    - name: Install tar
+      pacman: name=tar
+    - name: Install unzip
+      pacman: name=unzip
+    - name: Install git
+      pacman: name=git
+
+    - name: Install NvChad
+      ansible.builtin.git:
+        repo: 'https://github.com/NvChad/starter.git'
+        dest: "{{ home_directory }}/.config/nvim"
+    
+    ## --------------
+    
+    ### should not be necessary
+    # - name: make .fonts directory 1
+    #   shell: mkdir "{{ home_directory }}"
+    - name: make Downloads directory
+      shell: mkdir "{{ temp_working_directory }}"
+    ### is necessary at least the first time 
+    - name: make .fonts directory
+      shell: mkdir "{{ home_directory }}/.fonts"
+
+    - name: Download JetBrainsMono
+      ansible.builtin.get_url:
+        url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+        dest: "{{ temp_working_directory }}/JetBrainsMono.zip"
+    - name: UNZIPPING JetBrainsMono
+      ansible.builtin.unarchive:
+        src: "{{ temp_working_directory }}/JetBrainsMono.zip"
+        dest: "{{ home_directory }}/.fonts"
+        copy: yes
+
+
+    - name: Download oh-my-bash
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
+        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+
+    - name: make oh-my-bash executable
+      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
+
+    - name: Install oh-my-bash
+      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+  
+  # - name: Download jetbrains-toolbox
+  #   ansible.builtin.get_url:
+  #     url: https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
+  #     # dest: "{{ temp_working_directory }}/jetbrains-toolbox.tar.gz"
+  #     dest: "/root/jetbrains-toolbox.tar.gz"
+  #
+  # - name: UNZIPPING jetbrains-toolbox
+  #   ansible.builtin.unarchive:
+  #     src: "{{ temp_working_directory }}/jetbrains-toolbox.tar.gz"
+  #     dest: "{{ temp_working_directory }}"
+  #     copy: yes
+  #
+  # - name: Install jetbrains-toolbox
+  #   ansible.builtin.command: "{{ temp_working_directory }}/jetbrains-toolbox"
+  
+  # x11 config
+  # get from git
+  # copy to path
+  # i3 config
