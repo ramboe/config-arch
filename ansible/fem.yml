@@ -1,4 +1,3 @@
-
 - hosts: localhost
   vars:
     user_name: ramboe
@@ -15,6 +14,14 @@
     #   ansible.builtin.git:
     #     repo: 'https://github.com/mnussbaum/ansible-yay.git'
     #     dest: '/usr/share/ansible'
+    
+    ### create directories
+    - name: make Downloads directory
+      shell: mkdir -p "{{ temp_working_directory }}"
+    - name: make .fonts directory
+      shell: mkdir -p "{{ home_directory }}/.fonts"
+    - name: make .i3 config directory
+      shell: mkdir -p "{{ home_directory }}/.config/i3/"
 
     - name: Install azure-cli
       pacman: name=azure-cli
@@ -60,19 +67,7 @@
         dest: "{{ home_directory }}/.config/nvim"
     
     ## --------------
-    
-    ### should not be necessary
-    - name: make .fonts directory
-      shell: mkdir -p "{{ home_directory }}/.fonts"
-    # - name: make home directory for user
-    #   shell: mkdir "{{ home_directory }}"
-    - name: make Downloads directory
-      shell: mkdir -p "{{ temp_working_directory }}"
-    - name: make .i3 config directory
-      shell: mkdir -p "{{ home_directory }}/.config/i3/"
-    ### is necessary at least the first time 
-#    - name: make .fonts directory
-#      shell: mkdir -p "{{ home_directory }}/.fonts"
+
 
     - name: Download JetBrainsMono font
       ansible.builtin.get_url:
@@ -84,44 +79,46 @@
         dest: "{{ home_directory }}/.fonts"
         copy: yes
 
-#    - name: Download oh-my-bash
-#      ansible.builtin.get_url:
-#        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
-#        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
-#
-#    - name: make oh-my-bash executable
-#      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
-#
-#    - name: Install oh-my-bash
-#      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
-  
-  # - name: Download jetbrains-toolbox
-  #   ansible.builtin.get_url:
-  #     url: https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
-  #     # dest: "{{ temp_working_directory }}/jetbrains-toolbox.tar.gz"
-  #     dest: "/root/jetbrains-toolbox.tar.gz"
-  #
-  # - name: UNZIPPING jetbrains-toolbox
-  #   ansible.builtin.unarchive:
-  #     src: "{{ temp_working_directory }}/jetbrains-toolbox.tar.gz"
-  #     dest: "{{ temp_working_directory }}"
-  #     copy: yes
-  #
-  # - name: Install jetbrains-toolbox
-  #   ansible.builtin.command: "{{ temp_working_directory }}/jetbrains-toolbox"
-  
-  # x11 config
-  # get from git
+    - name: Download oh-my-bash
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
+        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
 
-    - name: CHECKOUT config-arch 
+    - name: make oh-my-bash executable
+      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
+
+    - name: Install oh-my-bash
+      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+        
+        # - name: Download jetbrains-toolbox
+        #   ansible.builtin.get_url:
+        #     url: https://www.jetbrains.com/toolbox-app/download/download-thanks.html?platform=linux
+        #     # dest: "{{ temp_working_directory }}/jetbrains-toolbox.tar.gz"
+        #     dest: "/root/jetbrains-toolbox.tar.gz"
+        #
+        # - name: UNZIPPING jetbrains-toolbox
+        #   ansible.builtin.unarchive:
+        #     src: "{{ temp_working_directory }}/jetbrains-toolbox.tar.gz"
+        #     dest: "{{ temp_working_directory }}"
+        #     copy: yes
+        #
+        # - name: Install jetbrains-toolbox
+        #   ansible.builtin.command: "{{ temp_working_directory }}/jetbrains-toolbox"
+      
+      # get from git
+    
+    
+    
+    # i3 config
+    - name: CHECKOUT config-arch
       ansible.builtin.git:
         repo: 'https://github.com/ramboe/config-arch.git'
         dest: "{{ home_directory }}/Documents/config-arch"
         version: 'prime'
-        
+
     - name: copy i3 config
       shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
-        
-        
-  # copy to path
-  # i3 config
+      
+      # x11 config
+    - name: copy x11 config
+      shell: "cp {{ home_directory }}/Documents/config-arch/.Xresources {{ home_directory }}/.Xresources"

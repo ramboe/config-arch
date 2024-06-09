@@ -37,7 +37,6 @@ docker run --detach --privileged --name archlinux_ansible_1 -it --volume=/sys/fs
 
 ```shell
 #docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /root/ansible/yaml/fem.yml
-docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /root/clemens/fem.yml
 docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /root/fem.yml
 ```  
 
