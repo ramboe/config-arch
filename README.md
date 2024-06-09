@@ -35,7 +35,7 @@ docker run --detach --privileged --name archlinux_ansible_1 -it --volume=/sys/fs
 ### 4 - exec ansible playbook  
 
 ```shell
-docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /root/fem.yml
+docker exec --tty archlinux_ansible_1 env TERM=xterm ansible-playbook -vv /mnt/data/source/config-arch/ansible/fem.yml
 ```  
 
 ![](https://firebasestorage.googleapis.com/v0/b/firescript-577a2.appspot.com/o/imgs%2Fapp%2Framboe%2FQAyG_Qb4lz.png?alt=media&token=421054cf-e855-4c10-970f-a779239d6eb3)  
