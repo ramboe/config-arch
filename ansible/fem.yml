@@ -61,7 +61,7 @@
     - name: Install git
       pacman: name=git
 
-    - name: Install NvChad
+    - name: CHECKOUT and install NvChad
       ansible.builtin.git:
         repo: 'https://github.com/NvChad/starter.git'
         dest: "{{ home_directory }}/.config/nvim"
@@ -73,22 +73,22 @@
       ansible.builtin.get_url:
         url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
         dest: "{{ temp_working_directory }}/JetBrainsMono.zip"
-    - name: UNZIPPING JetBrainsMono
+    - name: UNZIP JetBrainsMono
       ansible.builtin.unarchive:
         src: "{{ temp_working_directory }}/JetBrainsMono.zip"
         dest: "{{ home_directory }}/.fonts"
         copy: yes
 
-    - name: Download oh-my-bash
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
-        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
-
-    - name: make oh-my-bash executable
-      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
-
-    - name: Install oh-my-bash
-      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+#    - name: Download oh-my-bash
+#      ansible.builtin.get_url:
+#        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
+#        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+#
+#    - name: make oh-my-bash executable
+#      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
+#
+#    - name: Install oh-my-bash
+#      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
         
         # - name: Download jetbrains-toolbox
         #   ansible.builtin.get_url:
@@ -122,3 +122,7 @@
       # x11 config
     - name: copy x11 config
       shell: "cp {{ home_directory }}/Documents/config-arch/.Xresources {{ home_directory }}/.Xresources"
+      
+      # obs config
+    - name: copy obs config
+      shell: "cp -r {{ home_directory }}/Documents/config-arch/.config/obs-studio {{ home_directory }}/.config/obs-studio"
