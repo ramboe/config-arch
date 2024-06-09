@@ -5,7 +5,6 @@
     home_directory: /home/{{ user_name }}
     temp_working_directory: "{{ home_directory }}/Downloads"
 
-
   become: true
   tasks:
     - name: Run the equivalent of "pacman -Sy" as a separate step
@@ -63,7 +62,7 @@
     ## --------------
     
     ### should not be necessary
-    # - name: make .fonts directory 1
+    # - name: make home directory for user
     #   shell: mkdir "{{ home_directory }}"
     - name: make Downloads directory
       shell: mkdir "{{ temp_working_directory }}"
@@ -71,7 +70,7 @@
     - name: make .fonts directory
       shell: mkdir "{{ home_directory }}/.fonts"
 
-    - name: Download JetBrainsMono
+    - name: Download JetBrainsMono font
       ansible.builtin.get_url:
         url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
         dest: "{{ temp_working_directory }}/JetBrainsMono.zip"
@@ -109,6 +108,17 @@
   
   # x11 config
   # get from git
-  
+
+    - name: CHECKOUT config-arch 
+      ansible.builtin.git:
+        repo: 'https://github.com/ramboe/config-arch.git'
+        dest: "{{ home_directory }}/Documents/config-arch"
+        version: 'prime'
+        
+    - name: copy i3 config
+      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
+        
+        
+    - name: move
   # copy to path
   # i3 config
