@@ -81,7 +81,6 @@
         dest: "{{ home_directory }}/.fonts"
         copy: yes
 
-
     - name: Download oh-my-bash
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
@@ -110,5 +109,6 @@
   
   # x11 config
   # get from git
+  
   # copy to path
   # i3 config
