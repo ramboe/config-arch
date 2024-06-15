@@ -58,6 +58,8 @@
       pacman: name=tar
     - name: Install unzip
       pacman: name=unzip
+    - name: Install brightnessctl
+      pacman: name=brightnessctl
     - name: Install git
       pacman: name=git
 
@@ -79,16 +81,16 @@
         dest: "{{ home_directory }}/.fonts"
         copy: yes
 
-#    - name: Download oh-my-bash
-#      ansible.builtin.get_url:
-#        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
-#        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
-#
-#    - name: make oh-my-bash executable
-#      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
-#
-#    - name: Install oh-my-bash
-#      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+    - name: Download oh-my-bash
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
+        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+
+    - name: make oh-my-bash executable
+      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
+
+    - name: Install oh-my-bash
+      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
         
         # - name: Download jetbrains-toolbox
         #   ansible.builtin.get_url:
@@ -107,7 +109,7 @@
       
       # get from git
     
-    
+    # nextcloud configuration
     
     # i3 config
     - name: CHECKOUT config-arch
