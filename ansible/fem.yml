@@ -173,8 +173,9 @@
         dest: "{{ home_directory }}/Documents/config-arch"
         version: 'prime'
 
-    - name: copy i3 config
-      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
+# sway hier!
+#    - name: copy i3 config
+#      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
       
       # x11 config
     - name: copy x11 config
