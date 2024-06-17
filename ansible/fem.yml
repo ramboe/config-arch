@@ -166,7 +166,8 @@
     - name: Install oh-my-bash
       shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
     
-    # i3 config
+    # ------------------ - config import
+    
     - name: CHECKOUT config-arch
       ansible.builtin.git:
         repo: 'https://github.com/ramboe/config-arch.git'
@@ -177,7 +178,7 @@
       #    - name: copy i3 config
       #      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
       
-      # x11 config
+      # tmux config config
       
       # obs config
     - name: copy obs config
