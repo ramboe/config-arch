@@ -9,7 +9,7 @@
   tasks:
     
     ## --------------
-    
+
     - name: make Downloads directory
       shell: mkdir -p "{{ temp_working_directory }}"
     - name: make .fonts directory
@@ -22,7 +22,7 @@
 
     - name: Install curl
       apt: name=curl
-    
+
     - name: Install gpg
       apt: name=gpg
     - name: Install wget
@@ -67,7 +67,7 @@
 
     - name: make wayland shortcut for brave executable
       shell: chmod +x /usr/bin/brave-browser-wayland
-      
+    
     # ------------------ 4 - misc
 
     - name: add nextcloud-client packages
@@ -165,21 +165,19 @@
 
     - name: Install oh-my-bash
       shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
-      
+    
     # i3 config
     - name: CHECKOUT config-arch
       ansible.builtin.git:
         repo: 'https://github.com/ramboe/config-arch.git'
         dest: "{{ home_directory }}/Documents/config-arch"
         version: 'prime'
-
-# sway hier!
-#    - name: copy i3 config
-#      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
+      
+      # sway hier!
+      #    - name: copy i3 config
+      #      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
       
       # x11 config
-    - name: copy x11 config
-      shell: "cp {{ home_directory }}/Documents/config-arch/.Xresources {{ home_directory }}/.Xresources"
       
       # obs config
     - name: copy obs config
