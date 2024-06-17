@@ -10,12 +10,12 @@
     
     ## --------------
     
-    ### should not be necessary
     - name: make Downloads directory
       shell: mkdir -p "{{ temp_working_directory }}"
-    ### is necessary at least the first time 
     - name: make .fonts directory
       shell: mkdir -p "{{ home_directory }}/.fonts"
+    - name: make .fonts directory
+      shell: mkdir -p "{{ home_directory }}/.config"
 
     - name: Install tmux
       apt: name=tmux
@@ -165,3 +165,21 @@
 
     - name: Install oh-my-bash
       shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
+      
+    # i3 config
+    - name: CHECKOUT config-arch
+      ansible.builtin.git:
+        repo: 'https://github.com/ramboe/config-arch.git'
+        dest: "{{ home_directory }}/Documents/config-arch"
+        version: 'prime'
+
+    - name: copy i3 config
+      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
+      
+      # x11 config
+    - name: copy x11 config
+      shell: "cp {{ home_directory }}/Documents/config-arch/.Xresources {{ home_directory }}/.Xresources"
+      
+      # obs config
+    - name: copy obs config
+      shell: "cp -r {{ home_directory }}/Documents/config-arch/.config/obs-studio {{ home_directory }}/.config/obs-studio"
