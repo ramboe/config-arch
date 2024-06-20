@@ -90,6 +90,8 @@
     - name: Install code
       apt: name=code
 
+    - name: Install wireguard
+      pacman: name=wireguard
     - name: Install chromium
       apt: name=chromium
     - name: Install dotnet-sdk-8.0
