@@ -32,6 +32,8 @@
     # - name: Install edge
     #   yay: name=microsoft-edge-stable
 
+    - name: Install wireguard
+      pacman: name=wireguard
     - name: Install chromium
       pacman: name=chromium
     - name: Install dotnet-sdk
