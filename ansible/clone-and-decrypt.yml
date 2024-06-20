@@ -24,6 +24,4 @@
 
     - name: Copy public key
       command: >
-        ansible-vault decrypt {{ ssh_path }}/id_rsa.pub --output={{ home_directory }}/.ssh
-      args:
-        creates: "{{ home_directory }}/.ssh"
+        cp '{{ ssh_path }}/id_rsa.pub' '{{ home_directory }}/.ssh/id_rsa.pub'
