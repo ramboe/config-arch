@@ -1,0 +1,28 @@
+ -  hosts: localhost
+    vars:
+      user_name: ramboe
+      home_directory: /home/{{ user_name }}
+      repo_url: 'https://github.com/ramboe/config-arch.git'
+      repo_dest: '{{ home_directory }}/Documents/config-arch'
+      encrypted_file_path: '{{ repo_dest }}/ansible/testfile'
+      decrypted_file_path: '{{ repo_dest }}/ansible/testfile-decrypted'
+
+    tasks:
+      - name: Clone the git repository
+        git:
+          repo: "{{ repo_url }}"
+          dest: "{{ repo_dest }}"
+          version: 'prime-ubuntu-sway'
+          update: yes
+
+      - name: Decrypt the file
+        command: >
+          ansible-vault decrypt {{ encrypted_file_path }} --output={{ decrypted_file_path }}
+        args:
+          creates: "{{ decrypted_file_path }}"
+
+      - name: Copy the decrypted file to the desired path
+        copy:
+          src: "{{ decrypted_file_path }}"
+          dest: "{{ decrypted_file_path }}"
+          mode: '0644'
