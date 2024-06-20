@@ -25,4 +25,4 @@
         copy:
           src: "{{ decrypted_file_path }}"
           dest: "{{ decrypted_file_path }}"
-          mode: '0644'
+          mode: '400'
