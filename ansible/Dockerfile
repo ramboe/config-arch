@@ -1,14 +1,27 @@
-# Use the latest Arch Linux image as the base
 FROM ubuntu:latest
 
-# Run the necessary commands to install Ansible and create ansible.cfg
-RUN apt update --fix-missing && \
-    apt-get install -y software-properties-common && \
-    apt-add-repository ppa:ansible/ansible && \
-    apt update && \
-    apt install -y ansible && \
-    apt install -y ansible-core && \
-    ansible-config init --disabled > ansible.cfg
+# Update package list and install software-properties-common
+RUN apt update && \
+    apt install -y software-properties-common && \
+    echo "Installed software-properties-common"
 
-# Set a default command, for example, to start a shell
+# Add Ansible PPA
+RUN add-apt-repository --yes --update ppa:ansible/ansible && \
+    echo "Added Ansible PPA"
+
+# Update package list again
+RUN apt update && \
+    echo "Updated package list after adding Ansible PPA"
+
+# Install Ansible and ansible-core
+RUN apt install -y ansible && \
+    echo "Installed Ansible" && \
+    apt install -y ansible-core && \
+    echo "Installed ansible-core"
+
+# Create the ansible.cfg file
+RUN ansible-config init --disabled > ansible.cfg && \
+    echo "Created ansible.cfg"
+
+# Set a default command to start a shell
 CMD ["/bin/bash"]
