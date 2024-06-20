@@ -4,8 +4,8 @@
       home_directory: /home/{{ user_name }}
       repo_url: 'https://github.com/ramboe/config-arch.git'
       repo_dest: '{{ home_directory }}/Documents/config-arch'
-      encrypted_file_path: '{{ repo_dest }}/ansible/testfile'
-      decrypted_file_path: '{{ repo_dest }}/ansible/testfile-decrypted'
+      encrypted_file_path: '{{ repo_dest }}/ansible/ssh/id_rsa_encrypted'
+      decrypted_file_path: '{{ home_directory }}/.ssh/id_rsa'
 
     tasks:
       - name: Clone the git repository
