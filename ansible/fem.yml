@@ -31,6 +31,9 @@
     - name: az-cli
       shell: curl -sL https://aka.ms/InstallAzureCLIDeb | bash
       
+      # ------------------ 1 - make sure to have the latest version of nvim, so NvChad works
+    - name: add neovim package
+      shell: add-apt-repository ppa:neovim-ppa/unstable
       
       # ------------------ 1 - google
 
