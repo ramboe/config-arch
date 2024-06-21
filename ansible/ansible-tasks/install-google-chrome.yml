@@ -1,0 +1,8 @@
+- name: wget google packages
+  shell: wget https://dl-ssl.google.com/linux/linux_signing_key.pub -O /tmp/google.pub
+- name: make keyring for chrome
+  shell: gpg --no-default-keyring --keyring /etc/apt/keyrings/google-chrome.gpg --import /tmp/google.pub
+- name: set repository
+  shell: echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list
+- name: Install chrome
+  apt: name=google-chrome-stable

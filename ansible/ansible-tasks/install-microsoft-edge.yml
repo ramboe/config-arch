@@ -1,0 +1,13 @@
+- name: Download microsoft-edge-stable deb
+  ansible.builtin.get_url:
+    url: https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_126.0.2592.56-1_amd64.deb
+    dest: "{{ temp_working_directory }}/microsoft-edge-stable.deb"
+
+- name: Install microsoft-edge-stable
+  apt:
+    deb: "{{ temp_working_directory }}/microsoft-edge-stable.deb"
+- name: create wayland shortcut for microsoft-edge-stable
+  shell: echo "microsoft-edge-stable --enable-features=UseOzonePlatform --ozone-platform=wayland" > /usr/bin/microsoft-edge-stable-wayland
+
+- name: make wayland shortcut executable
+  shell: chmod +x /usr/bin/microsoft-edge-stable-wayland

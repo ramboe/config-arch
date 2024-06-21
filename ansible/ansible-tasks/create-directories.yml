@@ -1,0 +1,6 @@
+- name: make Downloads directory
+  shell: mkdir -p "{{ temp_working_directory }}"
+- name: make .fonts directory
+  shell: mkdir -p "{{ home_directory }}/.fonts"
+- name: make .fonts directory
+  shell: mkdir -p "{{ home_directory }}/.config"

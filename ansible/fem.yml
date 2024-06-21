@@ -7,15 +7,14 @@
 
   become: true
   tasks:
-    
-    ## --------------
-
-    - name: make Downloads directory
-      shell: mkdir -p "{{ temp_working_directory }}"
-    - name: make .fonts directory
-      shell: mkdir -p "{{ home_directory }}/.fonts"
-    - name: make .fonts directory
-      shell: mkdir -p "{{ home_directory }}/.config"
+    - include: 'ansible-tasks/create-directories.yml'
+    - include: 'ansible-tasks/install-brave.yml'
+    - include: 'ansible-tasks/install-further-packages.yml'
+    - include: 'ansible-tasks/install-google-chrome.yml'
+    - include: 'ansible-tasks/install-microsoft-edge.yml'
+    - include: 'ansible-tasks/install-nvchad.yml'
+    - include: 'ansible-tasks/install-oh-my-bash.yml'
+    - include: 'ansible-tasks/install-vscode.yml'
 
     - name: Install tmux
       apt: name=tmux
@@ -30,69 +29,9 @@
 
     - name: az-cli
       shell: curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-      
-      # ------------------ 1 - make sure to have the latest version of nvim, so NvChad works
-    - name: add neovim package
-      shell: add-apt-repository ppa:neovim-ppa/unstable
-      
-      # ------------------ 1 - google
-
-    - name: wget google packages
-      shell: wget https://dl-ssl.google.com/linux/linux_signing_key.pub -O /tmp/google.pub
-    - name: make keyring for chrome
-      shell: gpg --no-default-keyring --keyring /etc/apt/keyrings/google-chrome.gpg --import /tmp/google.pub
-    - name: set repository
-      shell: echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list
     
-    # ------------------ 2 - microsoft
-
-    - name: wget microsoft packages
-      shell: wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    - name: install microsoft packages
-      shell: install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-    - name: set repository for microsoft packages
-      shell: echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | tee /etc/apt/sources.list.d/vscode.list > /dev/null
-    - name: cleanup microsoft packages
-      shell: rm -f packages.microsoft.gpg
-    
-    # ------------------ 3 - brave
-
-    - name: brave curl keyring
-      shell: curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-    - name: brave echo release list
-      shell: echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"| tee /etc/apt/sources.list.d/brave-browser-release.list
-
-    - name: Install brave-browser
-      apt: name=brave-browser
-
-    - name: create wayland shortcut for brave
-      shell: echo "brave-browser --enable-features=UseOzonePlatform --ozone-platform=wayland" > /usr/bin/brave-browser-wayland
-
-    - name: make wayland shortcut for brave executable
-      shell: chmod +x /usr/bin/brave-browser-wayland
-    
-    # ------------------ 4 - misc
-
-    - name: add nextcloud-client packages
-      shell: add-apt-repository ppa:nextcloud-devs/client
-
-    - name: add telegram-client packages
-      shell: add-apt-repository ppa:atareao/telegram
-    
-    # ------------------ - update
-    - name: Run the equivalent of "apt update" as a separate step
-      apt:
-        update_cache: yes
-    
-    # ------------------ - normal installs
-
     - name: Install apt-transport-https
       apt: name=apt-transport-https
-
-
-    - name: Install code
-      apt: name=code
-
     - name: Install wireguard
       pacman: name=wireguard
     - name: Install chromium
@@ -103,73 +42,10 @@
       apt: name=keepassxc
     - name: Install flameshot
       apt: name=flameshot
-
-    - name: Download microsoft-edge-stable deb
-      ansible.builtin.get_url:
-        url: https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_126.0.2592.56-1_amd64.deb
-        dest: "{{ temp_working_directory }}/microsoft-edge-stable.deb"
-
-    - name: Install microsoft-edge-stable
-      apt:
-        deb: "{{ temp_working_directory }}/microsoft-edge-stable.deb"
-
-    - name: create wayland shortcut for microsoft-edge-stable
-      shell: echo "microsoft-edge-stable --enable-features=UseOzonePlatform --ozone-platform=wayland" > /usr/bin/microsoft-edge-stable-wayland
-
-    - name: make wayland shortcut executable
-      shell: chmod +x /usr/bin/microsoft-edge-stable-wayland
-
-    - name: Install nextcloud-client
-      apt: name=nextcloud-client
-    # - name: Install telegram-desktop
-    #   apt: name=telegram-desktop
     - name: Install obs-studio
       apt: name=obs-studio
-    - name: Install neovim
-      apt: name=neovim
-    - name: Install chrome
-      apt: name=google-chrome-stable
-    - name: Install gcc
-      apt: name=gcc
-    - name: Install ripgrep
-      apt: name=ripgrep
     
-    # shoud already exist on the machine
-    - name: Install tar
-      apt: name=tar
-    - name: Install unzip
-      apt: name=unzip
-    - name: Install git
-      apt: name=git
 
-    - name: Install NvChad
-      ansible.builtin.git:
-        repo: 'https://github.com/NvChad/starter.git'
-        dest: "{{ home_directory }}/.config/nvim"
-
-
-    - name: Download JetBrainsMono
-      ansible.builtin.get_url:
-        url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
-        dest: "{{ temp_working_directory }}/JetBrainsMono.zip"
-    - name: UNZIPPING JetBrainsMono
-      ansible.builtin.unarchive:
-        src: "{{ temp_working_directory }}/JetBrainsMono.zip"
-        dest: "{{ home_directory }}/.fonts"
-        copy: yes
-
-    # ------------------ - oh-my-bash
-
-    - name: Download oh-my-bash
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
-        dest: "{{ temp_working_directory }}/install-oh-my-bash.sh"
-
-    - name: make oh-my-bash executable
-      shell: chmod +x "{{ temp_working_directory }}/install-oh-my-bash.sh"
-
-    - name: Install oh-my-bash
-      shell: "{{ temp_working_directory }}/install-oh-my-bash.sh"
     
     # ------------------ - config import
     
@@ -178,10 +54,6 @@
         repo: 'https://github.com/ramboe/config-arch.git'
         dest: "{{ home_directory }}/Documents/config-arch"
         version: 'prime'
-      
-      # sway hier!
-      #    - name: copy i3 config
-      #      shell: "cp {{ home_directory }}/Documents/config-arch/.config/i3/config {{ home_directory }}/.config/i3/config"
       
       # tmux config config
       

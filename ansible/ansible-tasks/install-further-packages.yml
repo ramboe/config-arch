@@ -1,0 +1,13 @@
+- name: add nextcloud-client packages
+  shell: add-apt-repository ppa:nextcloud-devs/client
+- name: add telegram-client packages
+  shell: add-apt-repository ppa:atareao/telegram
+  
+- name: Run the equivalent of "apt update" as a separate step
+  apt:
+    update_cache: yes
+  
+- name: Install nextcloud-client
+  apt: name=nextcloud-client
+- name: Install telegram-desktop
+  apt: name=telegram-desktop

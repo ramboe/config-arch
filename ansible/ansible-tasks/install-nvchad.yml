@@ -1,0 +1,36 @@
+- name: add neovim package
+  shell: add-apt-repository ppa:neovim-ppa/unstable
+  
+
+- name: Run the equivalent of "apt update" as a separate step
+  apt:
+    update_cache: yes
+# shoud already exist on the machine
+- name: Install tar
+  apt: name=tar
+- name: Install unzip
+  apt: name=unzip
+- name: Install git
+  apt: name=git
+
+- name: Install gcc
+  apt: name=gcc
+- name: Install ripgrep
+  apt: name=ripgrep
+- name: Install neovim
+  apt: name=neovim
+  
+- name: Install NvChad
+  ansible.builtin.git:
+    repo: 'https://github.com/NvChad/starter.git'
+    dest: "{{ home_directory }}/.config/nvim"
+
+- name: Download JetBrainsMono
+  ansible.builtin.get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+    dest: "{{ temp_working_directory }}/JetBrainsMono.zip"
+- name: UNZIPPING JetBrainsMono
+  ansible.builtin.unarchive:
+    src: "{{ temp_working_directory }}/JetBrainsMono.zip"
+    dest: "{{ home_directory }}/.fonts"
+    copy: yes
