@@ -1,0 +1,38 @@
+- hosts: localhost
+  vars:
+    user_name: ramboe
+    home_directory: /home/{{ user_name }}
+    repo_url: 'https://github.com/ramboe/config-arch.git'
+    repo_dest: '{{ home_directory }}/Documents/config-arch'
+    wireguard_repo_path: '{{ repo_dest }}/ansible/wireguard/sweden'
+    encrypted_file1_path: '{{ wireguard_repo_path }}/sweden-wg0-encrypted.conf'
+    encrypted_file2_path: '{{ wireguard_repo_path }}/sweden-wg1-encrypted.conf'
+    encrypted_file3_path: '{{ wireguard_repo_path }}/sweden-wg2-encrypted.conf'
+    decrypted_file_path: '/etc/wireguard'
+  
+  tasks:
+    - name: Clone the git repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_dest }}"
+        version: 'prime-ubuntu-sway'
+        update: yes
+
+    - name: Decrypt and copy wg0
+      command: >
+        ansible-vault decrypt {{ encrypted_file1_path }} --output={{ decrypted_file_path }}/sweden-wg0.conf
+      args:
+        creates: "{{ decrypted_file_path }}"
+        
+    - name: Decrypt and copy wg1
+      command: >
+        ansible-vault decrypt {{ encrypted_file2_path }} --output={{ decrypted_file_path }}/sweden-wg1.conf
+      args:
+        creates: "{{ decrypted_file_path }}"
+        
+    - name: Decrypt and copy wg2
+      command: >
+        ansible-vault decrypt {{ encrypted_file3_path }} --output={{ decrypted_file_path }}/sweden-wg2.conf
+      args:
+        creates: "{{ decrypted_file_path }}"
+
