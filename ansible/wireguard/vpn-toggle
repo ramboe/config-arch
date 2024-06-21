@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Directory containing the Wireguard configuration files
+CONFIG_DIR="/etc/wireguard"
+
+# Function to list available Wireguard configurations
+list_configs() {
+  configs=($(ls "$CONFIG_DIR"/*.conf 2>/dev/null))
+  num_configs=${#configs[@]}
+}
+
+# Function to display the list of configurations
+display_configs() {
+  echo "Available Wireguard configurations:"
+  for i in "${!configs[@]}"; do
+    echo "$((i+1)). $(basename "${configs[$i]}")"
+  done
+}
+
+# Function to prompt the user to select a configuration
+prompt_selection() {
+  read -p "Select a configuration to activate (1-$num_configs): " choice
+  if [[ "$choice" -lt 1 || "$choice" -gt "$num_configs" ]]; then
+    echo "Invalid selection. Exiting."
+    exit 1
+  fi
+  selected_config="${configs[$((choice-1))]}"
+}
+
+# Check if any Wireguard interface is currently active
+active_interface=$(wg show interfaces | head -n 1)
+
+if [ -n "$active_interface" ]; then
+  # If an active interface is found, bring it down
+  echo "Wireguard interface $active_interface is currently active."
+  sudo wg-quick down "$active_interface"
+  if [ $? -eq 0 ]; then
+    echo "Wireguard interface $active_interface deactivated successfully."
+  else
+    echo "Failed to deactivate Wireguard interface $active_interface."
+  fi
+else
+  # No active interface found, proceed to activate a new one
+  list_configs
+
+  # Check if there are any .conf files
+  if [ "$num_configs" -eq 0 ]; then
+    echo "No Wireguard configuration files found in $CONFIG_DIR."
+    exit 1
+  fi
+
+  display_configs
+  prompt_selection
+
+  # Execute 'wg-quick up' with the selected configuration file
+  sudo wg-quick up "$selected_config"
+  if [ $? -eq 0 ]; then
+    echo "Wireguard configuration $(basename "$selected_config") activated successfully."
+  else
+    echo "Failed to activate Wireguard configuration $(basename "$selected_config")."
+  fi
+fi
+
