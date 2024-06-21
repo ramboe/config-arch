@@ -10,6 +10,7 @@
     encrypted_file3_path: '{{ wireguard_repo_path }}/sweden/sweden-wg2-encrypted.conf'
     decrypted_file_path: '/etc/wireguard'
   
+  become: true
   tasks:
     - name: Clone the git repository
       git:
@@ -39,3 +40,7 @@
     - name: Copy vpn-toggle-script
       command: >
         cp '{{ wireguard_repo_path }}/vpn-toggle' '/usr/bin/vpn-toggle'
+        
+    - name: make vpn-toggle-script executable
+      command: >
+        chmod +x /usr/bin/vpn-toggle

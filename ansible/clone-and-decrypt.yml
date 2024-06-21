@@ -8,6 +8,7 @@
     encrypted_file_path: '{{ ssh_path }}/id_rsa_encrypted'
     decrypted_file_path: '{{ home_directory }}/.ssh/id_rsa'
   
+  become: true
   tasks:
     - name: Clone the git repository
       git:
