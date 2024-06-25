@@ -15,6 +15,9 @@
       apt:
         update_cache: yes
 
+    - name: import create directories
+      include_tasks: 'ansible-tasks/create-directories.yml'
+      
     - name: Install tmux
       apt: name=tmux
     - name: Install curl
@@ -30,7 +33,18 @@
     - name: Install apt-transport-https
       apt: name=apt-transport-https
 
-    - name: import create directories
+    - name: Setup ssh
+      include_tasks: 'ansible-tasks/setup-ssh.yml'
+      vars:
+        user_name: ramboe
+        home_directory: /home/{{ user_name }}
+        repo_url: 'https://github.com/ramboe/config-arch.git'
+        repo_dest: '{{ home_directory }}/Documents/config-arch'
+        ssh_path: '{{ repo_dest }}/ansible/ssh'
+        encrypted_file_path: '{{ ssh_path }}/id_rsa_encrypted'
+        decrypted_file_path: '{{ home_directory }}/.ssh/id_rsa'
+        
+    - name: Setup wireguard
       include_tasks: 'ansible-tasks/setup-wireguard.yml'
       vars:
         user_name: ramboe
@@ -47,8 +61,6 @@
       #        vault_password: '{{ vault_password }}'
       
       
-      #    - name: import create directories
-      #      include_tasks: 'ansible-tasks/create-directories.yml'
       #    - name: import nvchad
       #      include_tasks: 'ansible-tasks/install-nvchad.yml'
       #    - name: import oh-my-bash
