@@ -25,12 +25,12 @@
     - name: Install apt-transport-https
       apt: name=apt-transport-https
       
-    - name: import create directories
-      include_tasks: 'ansible-tasks/create-directories.yml'
-    - name: import nvchad
-      include_tasks: 'ansible-tasks/install-nvchad.yml'
-    - name: import oh-my-bash
-      include_tasks: 'ansible-tasks/install-oh-my-bash.yml'
+#    - name: import create directories
+#      include_tasks: 'ansible-tasks/create-directories.yml'
+#    - name: import nvchad
+#      include_tasks: 'ansible-tasks/install-nvchad.yml'
+#    - name: import oh-my-bash
+#      include_tasks: 'ansible-tasks/install-oh-my-bash.yml'
 #    - name: import microsoft-edge
 #      include_tasks: 'ansible-tasks/install-microsoft-edge.yml'
 #    - name: import google-chrome
@@ -53,22 +53,24 @@
 #      apt: name=flameshot
 #    - name: Install obs-studio
 #      apt: name=obs-studio
-#    - name: Install wireguard
-#      apt: name=wireguard
+    - name: Install wireguard
+      apt: name=wireguard
 #    - name: az-cli
 #      shell: curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     
+    - name: Install git
+      apt: name=git
     
     # ------------------ - config import
 
-    - name: CHECKOUT config-arch
-      ansible.builtin.git:
-        repo: 'https://github.com/ramboe/config-arch.git'
-        dest: "{{ home_directory }}/Documents/config-arch"
-        version: 'prime'
+#    - name: CHECKOUT config-arch
+#      ansible.builtin.git:
+#        repo: 'https://github.com/ramboe/config-arch.git'
+#        dest: "{{ home_directory }}/Documents/config-arch"
+#        version: 'prime'
       
       # tmux config config
       
       # obs config
-    - name: copy obs config
-      shell: "cp -r {{ home_directory }}/Documents/config-arch/.config/obs-studio {{ home_directory }}/.config/obs-studio"
+#    - name: copy obs config
+#      shell: "cp -r {{ home_directory }}/Documents/config-arch/.config/obs-studio {{ home_directory }}/.config/obs-studio"

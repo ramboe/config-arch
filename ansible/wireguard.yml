@@ -5,9 +5,10 @@
     repo_url: 'https://github.com/ramboe/config-arch.git'
     repo_dest: '{{ home_directory }}/Documents/config-arch'
     wireguard_repo_path: '{{ repo_dest }}/ansible/wireguard'
-    encrypted_file1_path: '{{ wireguard_repo_path }}/sweden/sweden-wg0-encrypted.conf'
-    encrypted_file2_path: '{{ wireguard_repo_path }}/sweden/sweden-wg1-encrypted.conf'
-    encrypted_file3_path: '{{ wireguard_repo_path }}/sweden/sweden-wg2-encrypted.conf'
+    encrypted_files:
+      - sweden/sweden-wg0-encrypted.conf
+      - sweden/sweden-wg1-encrypted.conf
+      - sweden/sweden-wg2-encrypted.conf
     decrypted_file_path: '/etc/wireguard'
   
   become: true
@@ -19,28 +20,17 @@
         version: 'prime-ubuntu-sway'
         update: yes
 
-    - name: Decrypt and copy wg0
+    - name: Decrypt and copy files
       command: >
-        ansible-vault decrypt {{ encrypted_file1_path }} --output={{ decrypted_file_path }}/sweden-wg0.conf
+        ansible-vault decrypt {{ wireguard_repo_path }}/{{ item }} --output={{ decrypted_file_path }}/{{ item | replace('sweden/', '') | replace('-encrypted.conf', '.conf') }}
       args:
-        creates: "{{ decrypted_file_path }}/sweden-wg0.conf"
-        
-    - name: Decrypt and copy wg1
-      command: >
-        ansible-vault decrypt {{ encrypted_file2_path }} --output={{ decrypted_file_path }}/sweden-wg1.conf
-      args:
-        creates: "{{ decrypted_file_path }}/sweden-wg1.conf"
-        
-    - name: Decrypt and copy wg2
-      command: >
-        ansible-vault decrypt {{ encrypted_file3_path }} --output={{ decrypted_file_path }}/sweden-wg2.conf
-      args:
-        creates: "{{ decrypted_file_path }}/sweden-wg2.conf"
+        creates: "{{ decrypted_file_path }}/{{ item | replace('sweden/', '') | replace('-encrypted.conf', '.conf') }}"
+      loop: "{{ encrypted_files }}"
 
     - name: Copy vpn-toggle-script
       command: >
         cp '{{ wireguard_repo_path }}/vpn-toggle' '/usr/bin/vpn-toggle'
-        
+
     - name: make vpn-toggle-script executable
       command: >
         chmod +x /usr/bin/vpn-toggle

@@ -9,8 +9,6 @@
   apt: name=tar
 - name: Install unzip
   apt: name=unzip
-- name: Install git
-  apt: name=git
 
 - name: Install gcc
   apt: name=gcc
