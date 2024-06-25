@@ -1,10 +1,9 @@
-- name: add neovim package
-  shell: add-apt-repository ppa:neovim-ppa/unstable
-  
+#- name: add neovim package
+#  shell: add-apt-repository ppa:neovim-ppa/unstable
+#- name: Run the equivalent of "apt update" as a separate step
+#  apt:
+#    update_cache: yes
 
-- name: Run the equivalent of "apt update" as a separate step
-  apt:
-    update_cache: yes
 # shoud already exist on the machine
 - name: Install tar
   apt: name=tar

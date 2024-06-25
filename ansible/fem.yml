@@ -7,48 +7,60 @@
 
   become: true
   tasks:
-    - include: 'ansible-tasks/create-directories.yml'
-    - include: 'ansible-tasks/install-brave.yml'
-    - include: 'ansible-tasks/install-further-packages.yml'
-    - include: 'ansible-tasks/install-google-chrome.yml'
-    - include: 'ansible-tasks/install-microsoft-edge.yml'
-    - include: 'ansible-tasks/install-nvchad.yml'
-    - include: 'ansible-tasks/install-oh-my-bash.yml'
-    - include: 'ansible-tasks/install-vscode.yml'
-
+    - name: Run the equivalent of "apt update" as a separate step
+      apt:
+        update_cache: yes
+        
     - name: Install tmux
       apt: name=tmux
 
     - name: Install curl
       apt: name=curl
-
     - name: Install gpg
       apt: name=gpg
     - name: Install wget
       apt: name=wget
 
-    - name: az-cli
-      shell: curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    
+
     - name: Install apt-transport-https
       apt: name=apt-transport-https
-    - name: Install wireguard
-      pacman: name=wireguard
-    - name: Install chromium
-      apt: name=chromium
-    - name: Install dotnet-sdk-8.0
-      apt: name=dotnet-sdk-8.0
-    - name: Install keepassxc
-      apt: name=keepassxc
-    - name: Install flameshot
-      apt: name=flameshot
-    - name: Install obs-studio
-      apt: name=obs-studio
+      
+    - name: import create directories
+      include_tasks: 'ansible-tasks/create-directories.yml'
+    - name: import nvchad
+      include_tasks: 'ansible-tasks/install-nvchad.yml'
+    - name: import oh-my-bash
+      include_tasks: 'ansible-tasks/install-oh-my-bash.yml'
+#    - name: import microsoft-edge
+#      include_tasks: 'ansible-tasks/install-microsoft-edge.yml'
+#    - name: import google-chrome
+#      include_tasks: 'ansible-tasks/install-google-chrome.yml'
+#    - name: import further packages
+#      include_tasks: 'ansible-tasks/install-further-packages.yml'
+#    - name: import brave
+#      include_tasks: 'ansible-tasks/install-brave.yml'
+#    - name: import vscode
+#      include_tasks: 'ansible-tasks/install-vscode.yml'
+#
+#
+#    - name: Install chromium
+#      apt: name=chromium
+#    - name: Install dotnet-sdk-8.0
+#      apt: name=dotnet-sdk-8.0
+#    - name: Install keepassxc
+#      apt: name=keepassxc
+#    - name: Install flameshot
+#      apt: name=flameshot
+#    - name: Install obs-studio
+#      apt: name=obs-studio
+#    - name: Install wireguard
+#      apt: name=wireguard
+#    - name: az-cli
+#      shell: curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     
-
     
     # ------------------ - config import
-    
+
     - name: CHECKOUT config-arch
       ansible.builtin.git:
         repo: 'https://github.com/ramboe/config-arch.git'

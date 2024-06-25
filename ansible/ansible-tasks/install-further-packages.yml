@@ -9,5 +9,5 @@
   
 - name: Install nextcloud-client
   apt: name=nextcloud-client
-- name: Install telegram-desktop
-  apt: name=telegram-desktop
+#- name: Install telegram-desktop
+#  apt: name=telegram-desktop
