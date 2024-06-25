@@ -9,10 +9,22 @@
       - sweden/sweden-wg0-encrypted.conf
       - sweden/sweden-wg1-encrypted.conf
       - sweden/sweden-wg2-encrypted.conf
+#      - finland/finland-wg0-encrypted.conf
     decrypted_file_path: '/etc/wireguard'
   
+  vars_prompt:
+    - name: vault_password
+      prompt: Enter vault password
+      private: yes
+
   become: true
   tasks:
+    - name: Create temporary vault password file
+      copy:
+        content: "{{ vault_password }}"
+        dest: "/tmp/vault_password"
+        mode: '0600'
+
     - name: Clone the git repository
       git:
         repo: "{{ repo_url }}"
@@ -22,15 +34,18 @@
 
     - name: Decrypt and copy files
       command: >
-        ansible-vault decrypt {{ wireguard_repo_path }}/{{ item }} --output={{ decrypted_file_path }}/{{ item | replace('sweden/', '') | replace('-encrypted.conf', '.conf') }}
-      args:
-        creates: "{{ decrypted_file_path }}/{{ item | replace('sweden/', '') | replace('-encrypted.conf', '.conf') }}"
+        ansible-vault decrypt {{ wireguard_repo_path }}/{{ item }} --output={{ decrypted_file_path }}/{{ item | replace('sweden/', '') | replace('-encrypted.conf', '.conf') }} --vault-password-file=/tmp/vault_password
       loop: "{{ encrypted_files }}"
 
     - name: Copy vpn-toggle-script
       command: >
         cp '{{ wireguard_repo_path }}/vpn-toggle' '/usr/bin/vpn-toggle'
 
-    - name: make vpn-toggle-script executable
+    - name: Make vpn-toggle-script executable
       command: >
         chmod +x /usr/bin/vpn-toggle
+
+    - name: Remove temporary vault password file
+      file:
+        path: "/tmp/vault_password"
+        state: absent
