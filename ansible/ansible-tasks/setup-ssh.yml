@@ -1,15 +1,9 @@
-#- hosts: localhost
-#  vars:
-#    user_name: ramboe
-#    home_directory: /home/{{ user_name }}
-#    repo_url: 'https://github.com/ramboe/config-arch.git'
-#    repo_dest: '{{ home_directory }}/Documents/config-arch'
-#    ssh_path: '{{ repo_dest }}/ansible/ssh'
-#    encrypted_file_path: '{{ ssh_path }}/id_rsa_encrypted'
-#    decrypted_file_path: '{{ home_directory }}/.ssh/id_rsa'
-#  
-#  become: true
-#  tasks:
+- name: Create temporary vault password file
+  copy:
+    content: "{{ vault_password }}"
+    dest: "/tmp/vault_password"
+    mode: '0600'
+    
 - name: Clone the git repository
   git:
     repo: "{{ repo_url }}"
@@ -19,10 +13,15 @@
 
 - name: Decrypt and copy private key
   command: >
-    ansible-vault decrypt {{ encrypted_file_path }} --output={{ decrypted_file_path }}
+    ansible-vault decrypt {{ encrypted_file_path }} --output={{ decrypted_file_path }} --vault-password-file=/tmp/vault_password
   args:
     creates: "{{ decrypted_file_path }}"
 
 - name: Copy public key
   command: >
     cp '{{ ssh_path }}/id_rsa.pub' '{{ home_directory }}/.ssh/id_rsa.pub'
+    
+- name: Remove temporary vault password file
+  file:
+    path: "/tmp/vault_password"
+    state: absent
