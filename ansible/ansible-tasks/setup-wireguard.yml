@@ -1,0 +1,30 @@
+- name: Create temporary vault password file
+  copy:
+    content: "{{ vault_password }}"
+    dest: "/tmp/vault_password"
+    mode: '0600'
+
+- name: Clone the git repository
+  git:
+    repo: "{{ repo_url }}"
+    dest: "{{ repo_dest }}"
+    version: 'prime-ubuntu-sway'
+    update: yes
+
+- name: Decrypt and copy files
+  command: >
+    ansible-vault decrypt {{ wireguard_repo_path }}/{{ item }} --output={{ decrypted_file_path }}/{{ item | replace('-encrypted.conf', '.conf') }} --vault-password-file=/tmp/vault_password
+  loop: "{{ encrypted_files }}"
+
+- name: Copy vpn-toggle-script
+  command: >
+    cp '{{ wireguard_repo_path }}/vpn-toggle' '/usr/bin/vpn-toggle'
+
+- name: Make vpn-toggle-script executable
+  command: >
+    chmod +x /usr/bin/vpn-toggle
+
+- name: Remove temporary vault password file
+  file:
+    path: "/tmp/vault_password"
+    state: absent
