@@ -6,10 +6,10 @@
     repo_dest: '{{ home_directory }}/Documents/config-arch'
     wireguard_repo_path: '{{ repo_dest }}/ansible/wireguard'
     encrypted_files:
-      - sweden/sweden-wg0-encrypted.conf
-      - sweden/sweden-wg1-encrypted.conf
-      - sweden/sweden-wg2-encrypted.conf
-#      - finland/finland-wg0-encrypted.conf
+      - sweden-wg0-encrypted.conf
+      - sweden-wg1-encrypted.conf
+      - sweden-wg2-encrypted.conf
+      - finland-wg0-encrypted.conf
     decrypted_file_path: '/etc/wireguard'
   
   vars_prompt:
@@ -34,7 +34,7 @@
 
     - name: Decrypt and copy files
       command: >
-        ansible-vault decrypt {{ wireguard_repo_path }}/{{ item }} --output={{ decrypted_file_path }}/{{ item | replace('sweden/', '') | replace('-encrypted.conf', '.conf') }} --vault-password-file=/tmp/vault_password
+        ansible-vault decrypt {{ wireguard_repo_path }}/{{ item }} --output={{ decrypted_file_path }}/{{ item | replace('-encrypted.conf', '.conf') }} --vault-password-file=/tmp/vault_password
       loop: "{{ encrypted_files }}"
 
     - name: Copy vpn-toggle-script
