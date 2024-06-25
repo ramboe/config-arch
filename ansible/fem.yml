@@ -61,12 +61,14 @@
       #        vault_password: '{{ vault_password }}'
       
       
-      #    - name: import nvchad
-      #      include_tasks: 'ansible-tasks/install-nvchad.yml'
-      #    - name: import oh-my-bash
-      #      include_tasks: 'ansible-tasks/install-oh-my-bash.yml'
-      #    - name: import microsoft-edge
-      #      include_tasks: 'ansible-tasks/install-microsoft-edge.yml'
+    - name: import nvchad
+      include_tasks: 'ansible-tasks/install-nvchad.yml'
+    - name: import oh-my-bash
+      include_tasks: 'ansible-tasks/install-oh-my-bash.yml'
+      
+#    - name: import microsoft-edge
+#      include_tasks: 'ansible-tasks/install-microsoft-edge.yml'
+      
       #    - name: import google-chrome
       #      include_tasks: 'ansible-tasks/install-google-chrome.yml'
       #    - name: import further packages
