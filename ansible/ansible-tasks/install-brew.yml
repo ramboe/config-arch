@@ -1,0 +1,28 @@
+- name: Install build-essential
+  apt: name=build-essential
+
+- name: curl homebrew/install.sh
+  shell: curl -fsSL -o install.sh https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+
+- name: make homebrew/install.sh executable
+  command: chmod +x /root/install.sh
+
+- name: exec homebrew/install.sh
+  shell: /root/install.sh
+#
+- name: brew command 1
+  shell: (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /root/.bashrc
+
+- name: brew command 2
+  shell: eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+- name: install npm
+  community.general.homebrew:
+    name: npm
+    state: present
+
+- name: install neovim
+  community.general.homebrew:
+    name: neovim
+    state: present
+

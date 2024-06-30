@@ -1,0 +1,25 @@
+- hosts: localhost
+  vars:
+    user_name: ramboe
+    home_directory: /home/{{ user_name }}
+    temp_working_directory: "{{ home_directory }}/Downloads"
+  
+
+  become: true
+  tasks:
+    - name: Run the equivalent of "apt update" as a separate step
+      apt:
+        update_cache: yes
+
+    - name: import create directories
+      include_tasks: 'ansible-tasks/create-directories.yml'
+
+    - name: Install curl
+      apt: name=curl
+    - name: Install git
+      apt: name=git
+        
+    - name: Install brew
+      include_tasks: 'ansible-tasks/install-brew.yml'
+      
+      

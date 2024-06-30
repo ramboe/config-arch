@@ -30,7 +30,13 @@ docker build -t custom-arch-ansible .
 
 ```shell
 docker run --detach --privileged --name archlinux_ansible_1 -it --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --volume=$(pwd):/etc/ansible/roles/role_under_test:rw --volume=/home/ramboe/RiderProjects/config-arch/ansible:/root custom-arch-ansible:latest bash
+```
+
+```shell
 docker run --detach --privileged --name ubuntu_ansible_1 -it --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --volume=$(pwd):/etc/ansible/roles/role_under_test:rw --volume=/mnt/data/source/config-arch/ansible:/root/ custom-ubuntu-ansible:latest bash
+```
+```shell
+docker run --detach --privileged --name ubuntu_ansible_1 -it --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --volume=$(pwd):/etc/ansible/roles/role_under_test:rw --volume=/home/ramboe/RiderProjects/config-arch/ansible:/root/ custom-ubuntu-ansible:latest bash
 ```
 
 ### 4 - exec ansible playbook  
